@@ -6,9 +6,9 @@ public class manageItems : MonoBehaviour
 {
     void Start()
     {
-        itemScripts();
+        itemScripts();    
     }
-     
+       
     private void itemScripts()
     {
         //DOORS

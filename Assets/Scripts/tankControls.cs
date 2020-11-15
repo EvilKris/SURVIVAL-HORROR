@@ -41,6 +41,14 @@ public class tankControls : MonoBehaviour
     {
         
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Respawn")
+        {
+            GameObject ob = collision.gameObject; 
+            Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+        }
+    }
 
     void movePlayer()
     {
