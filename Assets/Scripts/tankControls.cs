@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class tankControls : MonoBehaviour
 {
-
+    private float _distToTarget;
 
     Rigidbody _rigidbody; 
     public GameObject thePlayer;
@@ -39,7 +39,7 @@ public class tankControls : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _distToTarget = 1.3f;
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -131,11 +131,33 @@ public class tankControls : MonoBehaviour
     }
 
     void Update()
-    {       
-        
-        
+    {
+        RaycastHit hit;
+        GameObject ob;
+        Animator anim;
+               
+
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, _distToTarget)) 
+        {
+                     
+
+            //CHECK FOR DOORS - ONLY ACTIVATES IF TAG IS DOOR AND DIST IS UNDER 1 UNITY AND MOUSE BUTTON CLICKED ONCE
+            
+            if (hit.collider.tag == "door" && Input.GetMouseButtonUp(0))
+            {
+                Debug.Log("OPEN SESAME!");
+                ob = hit.collider.gameObject;
+                anim = ob.GetComponent<Animator>();
+                anim.SetBool("openDoor", true);
+
+                //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                //Debug.Log(hit.distance);                               
+            }
+        }
+
     }
 
+   
     void FixedUpdate()
     {
 
