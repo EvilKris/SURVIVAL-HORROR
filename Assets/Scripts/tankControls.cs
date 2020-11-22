@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class tankControls : MonoBehaviour
 {
+    //Main character class, at the moment it deals with movement and collision detection
+
     private float _distToTarget;
 
     Rigidbody _rigidbody; 
@@ -43,79 +45,34 @@ public class tankControls : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
+        //Respawn is the placeholder name I'm using for items that can be picked up
+        //this method ensures that items that can be picked up do not interract with the player
         if (collision.gameObject.tag == "Respawn")
         {
             GameObject ob = collision.gameObject; 
             Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
         }
+
+        //TO DO: want to animated my main guy to actually move his arms in the direction of the items, poss with IK hands. 
+        //not too concerned with how good it looks as long as it doesn't look like utter rubbish. 
     }
-
-    void movePlayer()
-    {
-        deltaTime = Time.deltaTime;
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
-
-        if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
-        {
-
-            isMoving = true;
-
-
-            //this aligns the gameobject to move in relation to the current camera
-            var forward = cam.transform.forward;
-            var right = cam.transform.right;
-
-            forward.y = 0f;
-            right.y = 0f;
-            forward.Normalize();
-            right.Normalize();
-
-            if (Input.GetButton("SKey") || Input.GetButton("WKey"))
-            {
-
-                //FORWARD AND BACKWARD MOVEMENT
-                if (Input.GetButton("SKey"))
-                { 
-                    //thePlayer.GetComponent<Animator>().Play("WalkBack");
-                }
-                else
-                { 
-                    //thePlayer.GetComponent<Animator>().Play("Walk");                  
-
-                }
-
-                var desiredMoveDirection = forward * vertical + right * horizontal;
-                transform.Translate(desiredMoveDirection * movementSpeed * deltaTime);
-            }
-            else if(Input.GetButton("DKey") || Input.GetButton("AKey"))
-            {
-
-               
-
-            }
-
-        }
-        else
-        {
-            isMoving = false;
-           // thePlayer.GetComponent<Animator>().Play("Idle");
-        }
-    }
-    // Update is called once per frame
 
     public void MoveInDirectionOfInput()
     {
+        //Moves player RES EVIL style using the camera forward vector to alter the angle of the motion keys
+
         Vector3 dir = Vector3.zero;
 
         dir.x = Input.GetAxis("Horizontal");
         dir.z = Input.GetAxis("Vertical");
 
-        Vector3 camDirection = Camera.main.transform.rotation * dir; 
-        Vector3 targetDirection = new Vector3(camDirection.x, 0, camDirection.z); //This line removes the "space ship" 3D flying effect. We take the cam direction but remove the y axis value
+        Vector3 camForwardFlat = new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        Vector3 camRightFlat = new Vector3(cam.transform.right.x, 0f, cam.transform.right.z).normalized;
 
-       // print(targetDirection);
+        _rigidbody.velocity = ((camRightFlat * dir.x) + (camForwardFlat * dir.z) + new Vector3(0f, _rigidbody.velocity.y, 0f)) * movementSpeed;
+
+        Vector3 camDirection = Camera.main.transform.rotation * dir;
+        Vector3 targetDirection = new Vector3(camDirection.x, 0, camDirection.z);
 
         if (dir != Vector3.zero)
         { //turn the character to face the direction of travel when there is input
@@ -125,24 +82,26 @@ public class tankControls : MonoBehaviour
             Time.deltaTime * rotationSpeed
             );
         }
-
-        _rigidbody.velocity = targetDirection.normalized * movementSpeed;     //normalized prevents char moving faster than it should with diagonal input
-
+                      
+        //TO DO: I THINK it moves at the correct angle BUT the player spins around, also have to add animations at some point. 
+        
     }
 
-    void Update()
+    void checkForDoors()
     {
+        //Sends out a ray in the forward transform only at a given distance and if it's clicked (mouse button up) on a door, open 
+        //door must have a bool called 'openDoor' 
+
         RaycastHit hit;
         GameObject ob;
         Animator anim;
-               
 
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, _distToTarget)) 
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, _distToTarget))
         {
-                     
+
 
             //CHECK FOR DOORS - ONLY ACTIVATES IF TAG IS DOOR AND DIST IS UNDER 1 UNITY AND MOUSE BUTTON CLICKED ONCE
-            
+
             if (hit.collider.tag == "door" && Input.GetMouseButtonUp(0))
             {
                 Debug.Log("OPEN SESAME!");
@@ -154,16 +113,16 @@ public class tankControls : MonoBehaviour
                 //Debug.Log(hit.distance);                               
             }
         }
-
     }
-
+       
+    void Update()
+    {
+        checkForDoors(); 
+    }
    
     void FixedUpdate()
     {
-
-
         MoveInDirectionOfInput();
-       // movePlayer();
-
+     
     }
 }
