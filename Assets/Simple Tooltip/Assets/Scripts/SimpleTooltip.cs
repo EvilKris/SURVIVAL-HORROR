@@ -15,6 +15,12 @@ public class SimpleTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool isUIObject = false;
     private bool showing = false;
 
+    // EDITS
+
+    public List<itemToolTipClass> itemToolTipGroup = new List<itemToolTipClass>();
+    public int tipA = 0;
+    public int tipB = 0;
+
     private void Awake()
     {
         eventSystem = FindObjectOfType<EventSystem>();

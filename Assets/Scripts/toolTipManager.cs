@@ -34,7 +34,9 @@ public class toolTipManager : MonoBehaviour
             //Debug.Log(obj.gameobject.name);
             var tooltipScript = obj.gameobject.AddComponent<SimpleTooltip>();
             var tooltip = obj.gameobject.GetComponent<SimpleTooltip>();
+            tooltip.itemToolTipGroup = itemToolTipGroup;
             tooltip.infoLeft = itemToolTipGroup[count].text[0];
+            tooltip.tipA = count;
             count++;
         }
     }

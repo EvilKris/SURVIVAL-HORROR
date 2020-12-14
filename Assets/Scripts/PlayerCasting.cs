@@ -120,6 +120,10 @@ public class PlayerCasting : MonoBehaviour
                 //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 //Debug.Log(hit.distance);                               
             }
+
+            
+
+
         }
     }
    

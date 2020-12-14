@@ -6,6 +6,7 @@ TagManager:
   tags:
   - item
   - door
+  - eventTrigger
   layers:
   - Default
   - TransparentFX

@@ -133,6 +133,17 @@ public class tankControls : MonoBehaviour
                 //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 //Debug.Log(hit.distance);                               
             }
+
+            if (hit.collider.tag == "eventTrigger" && Input.GetMouseButtonUp(0))
+            {
+                ob = hit.collider.gameObject;
+                //
+                ob.SendMessage("doEvent", 1);
+
+
+            }
+
+
         }
     }
        
