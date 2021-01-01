@@ -9,33 +9,66 @@ public class eventTwoScript : MonoBehaviour
 
     private int eventPhase = 0;
 
-    public float lookSpeed = 3;
-    private Vector2 rotation = Vector2.zero;
-
-
-    void PauseGame()
+    private Canvas EscCan;
+    private GameObject clone;
+    // look out the window
+    /*
+    private void Looky(GameObject) // Look rotation (UP down is Camera) (Left right is Transform rotation)
     {
-        Time.timeScale = 0;
-    }
-
-    void ResumeGame()
-    {
-        Time.timeScale = 1;
-    }
-    public void Look() // Look rotation (UP down is Camera) (Left right is Transform rotation)
-    {
-        rotation.y += Input.GetAxis("Mouse X");
-        rotation.x += -Input.GetAxis("Mouse Y");
-        rotation.x = Mathf.Clamp(rotation.x, -15f, 15f);
+        thing.transform.rotation.y += Input.GetAxis("Mouse X");
+        ob.rotation.x += -Input.GetAxis("Mouse Y");
+        ob.rotation.x = Mathf.Clamp(rotation.x, -15f, 15f);
         transform.eulerAngles = new Vector2(0, rotation.y) * lookSpeed;
         Camera.main.transform.localRotation = Quaternion.Euler(rotation.x * lookSpeed, 0, 0);
-    }
-    // look out the window
+    }*/
+
+
     void doEvent(int go)
     {
         eventPhase = go;
+        GameObject tempObject = GameObject.Find("MainCode");
         Debug.Log("OK WORKING");
-        PauseGame();
+        
+        
+
+        if (tempObject != null)
+        {
+            //If we found the object , get the Canvas component from it.
+            //EscCan = tempObject.GetComponent<Canvas>();
+            tempObject.GetComponent<PauseMenu>().pauseMenuUI.SetActive(true);
+
+            clone = this.gameObject;
+            gameObject.layer = 9; //LIGHTS LAYER
+            clone.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+            clone.transform.parent = Camera.main.transform;
+
+
+            // Add the light component
+
+            GameObject lightGameObject = new GameObject("The Light");
+            Light lightComp = lightGameObject.AddComponent<Light>();
+            lightComp.color = Color.green;
+            lightGameObject.transform.position=Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+            lightGameObject.GetComponent<Light>().cullingMask = 1 << 9;
+            lightGameObject.transform.parent = clone.transform;
+
+            // Instantiate(this.gameObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            //clone.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+            // Destroy(clone.GetComponent<eventTwoScript>());
+            /*
+            if (EscCan == null)
+            {
+                Debug.Log("Could not locate Canvas component on " + tempObject.name);
+            }
+
+            */
+            eventPhase = 1;
+        }
+        else
+        {
+            Debug.Log("Cannot find PauseMenuCanvas");
+        }
+        //PauseGame();
         //var tooltip = GetComponent<SimpleTooltip>();
         //tooltip.infoLeft = tooltip.itemToolTipGroup[tooltip.tipA].text[1];
         //Destroy(gameObject);
@@ -45,6 +78,10 @@ public class eventTwoScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(eventPhase==1)
+        {
+           // clone.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+           // clone.transform.rotation = new Quaternion(0.0f, Camera.main.transform.rotation.y, 0.0f, Camera.main.transform.rotation.w);
+        }
     }
 }
