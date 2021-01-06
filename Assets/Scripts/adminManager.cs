@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class manageItems : MonoBehaviour
+public class adminManager : MonoBehaviour
 {
+    public GameObject itemMenuPrefab;
+
     void Start()
     {
         itemScripts();    
