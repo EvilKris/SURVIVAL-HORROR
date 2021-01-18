@@ -9,7 +9,7 @@ public class UIInventory : MonoBehaviour {
 
     void Awake()
     {
-        for(int i = 0; i < 24; i++)
+        for(int i = 0; i < 10; i++)
         {
             GameObject instance = Instantiate(slotPrefab);
             instance.transform.SetParent(slotPanel);

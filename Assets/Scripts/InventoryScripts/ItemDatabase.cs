@@ -23,12 +23,12 @@ public class ItemDatabase : MonoBehaviour {
     void BuildDatabase()
     {
         items = new List<Item>() {
-            new Item(0, "Diamond Sword", "A sword made of diamond.",
+            new Item(0, "Rusty Pipe", "Very rusted and weak, but might be useful for smashing something",
             new Dictionary<string, int> {
                 { "Power", 15 },
                 { "Defence", 10 }
             }),
-            new Item(1, "Diamond Ore", "A pretty diamond.",
+            new Item(1, "Cell Key", "Might be the way out of this prison",
             new Dictionary<string, int> {
                 { "Value", 300 }
             }),
