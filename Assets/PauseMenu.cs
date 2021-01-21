@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     void Resume()
     {
         //pauseMenuUI.SetActive(false);
-
+        
         //copy.GetComponent<objectInspector>().obToUse = itemToExamine;
         Destroy(prefabPauseMenu);
         Time.timeScale = 1;

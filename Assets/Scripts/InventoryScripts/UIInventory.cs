@@ -7,6 +7,8 @@ public class UIInventory : MonoBehaviour {
     public GameObject slotPrefab;
     public Transform slotPanel;
 
+    //Worst fucking third-party code I've ever used but I got in too deep to abandon it
+    //puts mouse listeners on every single slot (inc unused ones). 
     void Awake()
     {
         for(int i = 0; i < 10; i++)

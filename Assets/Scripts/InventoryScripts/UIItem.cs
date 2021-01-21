@@ -6,21 +6,25 @@ using UnityEngine.EventSystems;
 
 public class UIItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
     public Item item;
+    public UIItem tempUI;
     private Image spriteImage;
-    private UIItem selectedItem;
+    public UIItem selectedItem;
     private Tooltip tooltip;
+    private bool doubleClicked; 
 
 
     void Awake()
     {        
         selectedItem = GameObject.Find("SelectedItem").GetComponent<UIItem>();
         tooltip = GameObject.Find("Tooltip").GetComponent<Tooltip>();
+
         spriteImage = GetComponent<Image>();
-        UpdateItem(null);
+         UpdateItem(null);
     }
 
     public void UpdateItem(Item item)
-    {     
+    {
+        Debug.Log(this.item);
         //places an icon in the inventory slot
         this.item = item;
         if (this.item != null)
@@ -37,8 +41,8 @@ public class UIItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, 
     }
 
     public void OnPointerDown(PointerEventData eventData)
-    {
-       
+    {    
+            
         if (this.item != null)
         {
             if (selectedItem.item != null)
@@ -54,6 +58,9 @@ public class UIItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, 
             {
                 //TAKE ONE 
                 Debug.Log("2");
+
+                selectedItem.tempUI = this;
+
                 selectedItem.UpdateItem(this.item);
                 UpdateItem(null);
             }
@@ -62,9 +69,17 @@ public class UIItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, 
         {
             //PUT IT BACK IN EMPTY 
             Debug.Log("3");
-            UpdateItem(selectedItem.item);
-            selectedItem.UpdateItem(null);
+            //UpdateItem(selectedItem.item);
+            //selectedItem.UpdateItem(null);
+            putBackInSlot();
+            
         }
+    }
+
+    public void putBackInSlot()
+    {
+        UpdateItem(selectedItem.item);
+        selectedItem.UpdateItem(null);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -83,13 +98,6 @@ public class UIItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, 
         tooltip.gameObject.SetActive(false);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log("double click");
-        if (eventData.clickCount == 2)
-        {
-            Debug.Log("double click");
-        }
-    }
+   
 
 }
